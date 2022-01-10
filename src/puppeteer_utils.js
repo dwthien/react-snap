@@ -242,7 +242,11 @@ const crawl = async opt => {
           const links = await getLinks({ page });
           links.forEach(addToQueue);
         }
-        afterFetch && (await afterFetch({ page, route, browser, addToQueue }));
+        try {
+          afterFetch && (await afterFetch({ page, route, browser, addToQueue }));
+        } catch (error) {
+          console.log(`afterFetch error at ${route}`, error);
+        }
         await page.close();
         console.log(`✅  crawled ${processed + 1} out of ${enqued} (${route})`);
       } catch (e) {
